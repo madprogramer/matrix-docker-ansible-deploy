@@ -10,3 +10,4 @@
 /roles/galaxy/*
 !/roles/galaxy/.gitkeep
 
+the_secret_vars.yaml
