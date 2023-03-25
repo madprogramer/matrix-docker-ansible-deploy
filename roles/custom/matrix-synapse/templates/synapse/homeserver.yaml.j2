@@ -555,6 +555,9 @@ templates:
   # information about using custom templates.
   #
   #custom_template_directory: /path/to/custom/templates/
+  {% if matrix_synapse_templates_custom_template_directory %}
+  custom_template_directory: {{ matrix_synapse_templates_custom_template_directory | to_json }}
+  {% endif %}
 
 # List of rooms to exclude from sync responses. This is useful for server
 # administrators wishing to group users into a room without these users being able
@@ -2363,7 +2366,7 @@ email:
   # subjects. It defaults to 'Matrix'.
   #
   #app_name: my_branded_matrix_server
-  app_name: Matrix
+  app_name: {{ matrix_synapse_email_app_name | to_json }}
 
   # Uncomment the following to enable sending emails for messages that the user
   # has missed. Disabled by default.
@@ -2511,6 +2514,7 @@ password_providers:
   - module: "ldap_auth_provider.LdapAuthProvider"
     config:
       enabled: true
+      mode: {{ matrix_synapse_ext_password_provider_ldap_mode | string | to_json }}
       uri: {{ matrix_synapse_ext_password_provider_ldap_uri | string|to_json }}
       start_tls: {{ matrix_synapse_ext_password_provider_ldap_start_tls|to_json }}
       base: {{ matrix_synapse_ext_password_provider_ldap_base | string|to_json }}
@@ -2532,6 +2536,8 @@ password_providers:
 ## Push ##
 
 push:
+  # enabled: false
+
   # Clients requesting push notifications can either have the body of
   # the message sent in the notification poke along with other details
   # like the sender, or just the event ID and room ID (`event_id_only`).
@@ -2836,12 +2842,6 @@ opentracing:
 
 ## Workers ##
 
-# Disables sending of outbound federation transactions on the main process.
-# Uncomment if using a federation sender worker.
-#
-#send_federation: false
-send_federation: {{ matrix_synapse_send_federation | to_json }}
-
 # It is possible to run multiple federation sender workers, in which case the
 # work is balanced across them.
 #
@@ -2859,7 +2859,6 @@ federation_sender_instances: {{ matrix_synapse_federation_sender_instances | to_
 {% if matrix_synapse_federation_pusher_instances | length > 0 %}
 pusher_instances: {{ matrix_synapse_federation_pusher_instances | to_json }}
 {% endif %}
-start_pushers: {{ matrix_synapse_start_pushers | to_json }}
 
 # When using workers this should be a map from `worker_name` to the
 # HTTP replication listener of the worker, if configured.

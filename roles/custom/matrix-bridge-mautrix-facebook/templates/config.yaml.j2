@@ -62,7 +62,7 @@ appservice:
 
 # Prometheus telemetry config. Requires prometheus-client to be installed.
 metrics:
-    enabled: false
+    enabled: {{ matrix_mautrix_facebook_metrics_enabled | to_json }}
     listen_port: 8000
 
 # Bridge config
@@ -216,8 +216,8 @@ bridge:
         #   $message            - The message content
         message_formats:
             m.text: '<b>$sender_displayname</b>: $message'
-            m.notice: '<b>$sender_displayname<b>: $message'
-            m.emote: '* <b>$sender_displayname<b> $message'
+            m.notice: '<b>$sender_displayname</b>: $message'
+            m.emote: '* <b>$sender_displayname</b> $message'
             m.file: '<b>$sender_displayname</b> sent a file'
             m.image: '<b>$sender_displayname</b> sent an image'
             m.audio: '<b>$sender_displayname</b> sent an audio file'
